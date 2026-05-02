@@ -406,7 +406,7 @@ function cnqCard(cnq) {
             borders: leftAccent(borderColor, 16),
             margins: { top: 200, bottom: 200, left: 200, right: 200 },
             children: [
-              labelPara('Portaria CNQ 2664/2026 — Uso de Inteligência Artificial', 4),
+              labelPara('Portaria CNPq nº 2.664/2026 — Uso de Inteligência Artificial', 4),
               badgePara(s),
               bodyPara(cnq.descricao || ''),
               space(4),
@@ -687,7 +687,7 @@ export async function generateDocx(d) {
     space(14),
 
     // ── 06 PORTARIA CNQ 2664/2026 ──
-    sectionHeader('IA', 'Portaria CNQ 2664/2026'),
+    sectionHeader('IA', 'Portaria CNPq nº 2.664/2026'),
     space(8),
     cnqCard(cnq),
     space(14),

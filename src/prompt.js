@@ -4,16 +4,16 @@ export function buildPrompt(clientName, month) {
 Analise os seguintes aspectos:
 1. Qualidade geral: tema, relevância, coerência temática, problema de pesquisa, objetivos
 2. Fundamentação teórica: qualidade das referências, autores essenciais ausentes, revisão crítica x descritiva
-3. Citações — NBR 10520:2023: padronização, páginas em citações diretas, uso correto de citação indireta, formatação de citações longas (acima de 3 linhas: recuo de 4 cm, fonte menor, sem aspas)
+3. Citações — NBR 10520:2023: padronização, sobrenomes em caixa mista (não mais CAIXA ALTA), páginas em citações diretas, uso correto de citação indireta, citações longas acima de 3 linhas com recuo de 4 cm e fonte menor sem aspas
 4. Metodologia: o que foi declarado, o que falta, justificativas ausentes
 5. Desenvolvimento e argumentação: coerência lógica, consistência teórica, profundidade analítica
 6. Normas ABNT:
    - NBR 6022:2018: estrutura do artigo (resumo, palavras-chave, seções, conclusão, referências)
-   - NBR 6023:2018: formatação das referências bibliográficas
+   - NBR 6023:2025: formatação das referências bibliográficas — atenção às mudanças da versão 2025: ISSN não é mais obrigatório para revistas, novos formatos para legislação, entrevistas, obras de arte, mapas, patentes, programas, filmes, músicas e documentos digitais com localizadores
    - NBR 6024:2012: numeração progressiva das seções — uso de algarismos arábicos, máximo 5 níveis de subdivisão (ex: 1, 1.1, 1.1.1), elementos não numerados conforme norma (preâmbulo, referências, glossário, apêndice, anexo, índice, agradecimentos)
    - NBR 6028:2021: resumo — tipo informativo (deve apresentar objetivos, metodologia, resultados e conclusões), extensão entre 100 e 250 palavras para artigos, redigido em parágrafo único, terceira pessoa, sem enumerações; palavras-chave com mínimo 3 e máximo 6 termos separados por ponto e vírgula; presença de abstract e keywords em inglês
-   - NBR 14724:2024: formatação geral (parágrafos, títulos, recuo em citações longas, maiúsculas)
-7. Portaria CNQ 2664/2026: verifique SE o artigo menciona uso de IA (ChatGPT, inteligência artificial, ferramentas de IA, etc.) E se há declaração desse uso nas considerações finais ou em nota de rodapé. Esta portaria exige declaração explícita sempre que IA for utilizada.
+   - NBR 14724:2024: formatação geral (margens, fonte, espaçamento, parágrafos, títulos, recuo em citações longas, maiúsculas) — atenção às mudanças da versão 2024 em relação à 2011
+7. Portaria CNPq nº 2.664, de 6 de março de 2026: verifique SE o artigo menciona uso de IA (ChatGPT, inteligência artificial, ferramentas de IA, etc.) E se há declaração desse uso nas considerações finais ou em nota de rodapé. A portaria exige declaração explícita do uso de IA, especificando a ferramenta e a finalidade; a IA não pode figurar como autora ou coautora; a responsabilidade pelo conteúdo é exclusivamente humana.
 
 Retorne exatamente este JSON preenchido com base no artigo real:
 
@@ -51,7 +51,7 @@ Retorne exatamente este JSON preenchido com base no artigo real:
       "Sobrenome, Nome (ano) — justificativa da relevância",
       "Sobrenome, Nome (ano) — justificativa da relevância"
     ],
-    "citacoes_nbr10520": "análise específica das citações: o que está errado e o modelo correto",
+    "citacoes_nbr10520": "análise específica das citações: o que está errado e o modelo correto conforme NBR 10520:2023 (sobrenomes em caixa mista, recuo de 4 cm em citações longas)",
     "alerta_revisao": "alerta principal sobre a qualidade da revisão bibliográfica, ou string vazia se adequada"
   },
 
@@ -80,7 +80,7 @@ Retorne exatamente este JSON preenchido com base no artigo real:
     },
     "referencias_nbr6023": {
       "status": "conforme ou parcial ou critico",
-      "descricao": "análise detalhada das inconsistências encontradas nas referências"
+      "descricao": "análise detalhada das inconsistências nas referências conforme NBR 6023:2025 (verificar ISSN, novos formatos para fontes digitais, legislação, etc.)"
     },
     "numeracao_nbr6024": {
       "status": "conforme ou parcial ou critico",
@@ -89,10 +89,10 @@ Retorne exatamente este JSON preenchido com base no artigo real:
     "resumo_nbr6028": {
       "status": "conforme ou parcial ou critico",
       "palavras_aproximado": 0,
-      "descricao": "análise do resumo: informativo ou descritivo, extensão, parágrafo único, terceira pessoa, palavras-chave (quantidade e separação), presença de abstract e keywords em inglês"
+      "descricao": "análise do resumo: informativo ou descritivo, extensão, parágrafo único, terceira pessoa, palavras-chave (quantidade e separação por ponto e vírgula), presença de abstract e keywords em inglês"
     },
     "formatacao_nbr14724": {
-      "descricao": "análise da formatação geral: parágrafos, títulos, recuo, uso de maiúsculas"
+      "descricao": "análise da formatação geral conforme NBR 14724:2024: margens, fonte, espaçamento, parágrafos, títulos, recuo, uso de maiúsculas"
     }
   },
 
@@ -102,7 +102,7 @@ Retorne exatamente este JSON preenchido com base no artigo real:
     "local_declaracao": "considerações finais ou nota de rodapé ou ausente ou não aplicável",
     "status": "conforme ou nao_conforme ou nao_aplicavel",
     "descricao": "descrição objetiva do que foi encontrado no artigo quanto ao uso de IA",
-    "recomendacao": "recomendação clara e específica para o autor"
+    "recomendacao": "recomendação clara e específica para o autor conforme Portaria CNPq nº 2.664/2026 (declarar ferramenta utilizada e finalidade; IA não pode ser coautora)"
   },
 
   "recomendacoes_prioritarias": {
