@@ -27,7 +27,7 @@ dropZone.addEventListener('drop', e => {
   e.preventDefault();
   dropZone.classList.remove('over');
   const f = e.dataTransfer.files[0];
-  if (f && f.type === 'application/pdf') setFile(f);
+  if (f && isAccepted(f)) setFile(f);
 });
 
 pdfInput.addEventListener('change', e => {
@@ -38,6 +38,13 @@ removeFile.addEventListener('click', e => {
   e.stopPropagation();
   clearFile();
 });
+
+function isAccepted(f) {
+  return f.type === 'application/pdf'
+    || f.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    || f.name.toLowerCase().endsWith('.pdf')
+    || f.name.toLowerCase().endsWith('.docx');
+}
 
 function setFile(f) {
   selectedFile = f;

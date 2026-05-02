@@ -1,16 +1,18 @@
 export function buildPrompt(clientName, month) {
-  return `Você é uma especialista em revisão acadêmica, normas ABNT e avaliação de periódicos científicos brasileiros. Analise criteriosamente o artigo científico anexo e retorne SOMENTE um JSON válido, sem texto adicional fora do bloco.
+  return `Você é uma especialista em revisão acadêmica, normas ABNT e avaliação de periódicos científicos brasileiros. Analise criteriosamente o artigo científico e retorne SOMENTE um JSON válido, sem texto adicional fora do bloco.
 
 Analise os seguintes aspectos:
 1. Qualidade geral: tema, relevância, coerência temática, problema de pesquisa, objetivos
 2. Fundamentação teórica: qualidade das referências, autores essenciais ausentes, revisão crítica x descritiva
-3. Citações — NBR 10520: padronização, páginas em citações diretas, uso correto de citação indireta
+3. Citações — NBR 10520:2023: padronização, páginas em citações diretas, uso correto de citação indireta, formatação de citações longas (acima de 3 linhas: recuo de 4 cm, fonte menor, sem aspas)
 4. Metodologia: o que foi declarado, o que falta, justificativas ausentes
 5. Desenvolvimento e argumentação: coerência lógica, consistência teórica, profundidade analítica
 6. Normas ABNT:
-   - NBR 6022: estrutura do artigo (resumo, palavras-chave, seções, conclusão, referências)
-   - NBR 6023: formatação das referências bibliográficas
-   - NBR 14724: formatação geral (parágrafos, títulos, recuo em citações longas, maiúsculas)
+   - NBR 6022:2018: estrutura do artigo (resumo, palavras-chave, seções, conclusão, referências)
+   - NBR 6023:2018: formatação das referências bibliográficas
+   - NBR 6024:2012: numeração progressiva das seções — uso de algarismos arábicos, máximo 5 níveis de subdivisão (ex: 1, 1.1, 1.1.1), elementos não numerados conforme norma (preâmbulo, referências, glossário, apêndice, anexo, índice, agradecimentos)
+   - NBR 6028:2021: resumo — tipo informativo (deve apresentar objetivos, metodologia, resultados e conclusões), extensão entre 100 e 250 palavras para artigos, redigido em parágrafo único, terceira pessoa, sem enumerações; palavras-chave com mínimo 3 e máximo 6 termos separados por ponto e vírgula; presença de abstract e keywords em inglês
+   - NBR 14724:2024: formatação geral (parágrafos, títulos, recuo em citações longas, maiúsculas)
 7. Portaria CNQ 2664/2026: verifique SE o artigo menciona uso de IA (ChatGPT, inteligência artificial, ferramentas de IA, etc.) E se há declaração desse uso nas considerações finais ou em nota de rodapé. Esta portaria exige declaração explícita sempre que IA for utilizada.
 
 Retorne exatamente este JSON preenchido com base no artigo real:
@@ -80,6 +82,15 @@ Retorne exatamente este JSON preenchido com base no artigo real:
       "status": "conforme ou parcial ou critico",
       "descricao": "análise detalhada das inconsistências encontradas nas referências"
     },
+    "numeracao_nbr6024": {
+      "status": "conforme ou parcial ou critico",
+      "descricao": "análise da numeração progressiva das seções: uso de arábicos, níveis de subdivisão, elementos não numerados conforme norma"
+    },
+    "resumo_nbr6028": {
+      "status": "conforme ou parcial ou critico",
+      "palavras_aproximado": 0,
+      "descricao": "análise do resumo: informativo ou descritivo, extensão, parágrafo único, terceira pessoa, palavras-chave (quantidade e separação), presença de abstract e keywords em inglês"
+    },
     "formatacao_nbr14724": {
       "descricao": "análise da formatação geral: parágrafos, títulos, recuo, uso de maiúsculas"
     }
@@ -129,5 +140,6 @@ REGRAS:
 - Pontuações entre 0 e 100; baseadas no conteúdo real do artigo
 - Status "Aprovado" apenas se não houver problemas estruturais ou metodológicos graves
 - ia_mencionada: true se o artigo mencionar qualquer ferramenta de IA
+- palavras_aproximado: estime a contagem de palavras do resumo
 - Retorne SOMENTE o bloco JSON acima, sem explicações adicionais`;
 }

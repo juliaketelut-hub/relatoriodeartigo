@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import mammoth from 'mammoth';
 import { generateDocx } from '../../src/generate-docx.js';
 import { buildPrompt } from '../../src/prompt.js';
 
@@ -7,29 +8,46 @@ export async function onRequestPost(context) {
 
   try {
     const form = await request.formData();
-    const pdfFile   = form.get('pdf');
+    const file       = form.get('pdf');
     const clientName = (form.get('clientName') || '').trim();
     const month      = (form.get('month') || currentMonthYear()).trim();
 
-    if (!pdfFile || typeof pdfFile === 'string') {
-      return jsonError('Arquivo PDF não encontrado.', 400);
+    if (!file || typeof file === 'string') {
+      return jsonError('Arquivo não encontrado.', 400);
     }
 
-    // PDF → base64
-    const arrayBuffer = await pdfFile.arrayBuffer();
-    const bytes = new Uint8Array(arrayBuffer);
-    let binary = '';
-    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-    const base64 = btoa(binary);
+    const arrayBuffer = await file.arrayBuffer();
+    const isDocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                   || (file.name || '').toLowerCase().endsWith('.docx');
 
-    // Call Claude
     const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+    let msg;
 
-    const msg = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 8192,
-      messages: [
-        {
+    if (isDocx) {
+      const result = await mammoth.extractRawText({ buffer: Buffer.from(arrayBuffer) });
+      const text = result.value;
+
+      msg = await anthropic.messages.create({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 8192,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'text', text: `CONTEÚDO DO ARTIGO CIENTÍFICO:\n\n${text}\n\n---\n\n${buildPrompt(clientName, month)}` },
+          ],
+        }],
+      });
+    } else {
+      // PDF → base64
+      const bytes = new Uint8Array(arrayBuffer);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+      const base64 = btoa(binary);
+
+      msg = await anthropic.messages.create({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 8192,
+        messages: [{
           role: 'user',
           content: [
             {
@@ -38,9 +56,9 @@ export async function onRequestPost(context) {
             },
             { type: 'text', text: buildPrompt(clientName, month) },
           ],
-        },
-      ],
-    });
+        }],
+      });
+    }
 
     const raw = msg.content[0]?.text || '';
 

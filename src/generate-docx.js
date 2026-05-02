@@ -322,10 +322,12 @@ function recsTable(data) {
   });
 }
 
-// ── ABNT cards (3 cells: NBR6022 | NBR6023 | NBR14724) ──
+// ── ABNT cards (5 normas: NBR6022 | NBR6023 / NBR6024 | NBR6028 / NBR14724) ──
 function abntSection(normas) {
-  const nbr6022 = normas.estrutura_nbr6022 || {};
-  const nbr6023 = normas.referencias_nbr6023 || {};
+  const nbr6022  = normas.estrutura_nbr6022  || {};
+  const nbr6023  = normas.referencias_nbr6023 || {};
+  const nbr6024  = normas.numeracao_nbr6024  || {};
+  const nbr6028  = normas.resumo_nbr6028     || {};
   const nbr14724 = normas.formatacao_nbr14724 || {};
 
   function abntCell(lbl, status, content) {
@@ -349,6 +351,11 @@ function abntSection(normas) {
   const ok6022   = (nbr6022.itens_ok    || []).map(t => `✓ ${t}`);
   const lack6022 = (nbr6022.itens_faltam || []).map(t => `✗ ${t}`);
 
+  const resumo6028 = [
+    nbr6028.palavras_aproximado ? `Palavras estimadas: ${nbr6028.palavras_aproximado}` : '',
+    nbr6028.descricao || '',
+  ].filter(Boolean);
+
   return [
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
@@ -363,7 +370,21 @@ function abntSection(normas) {
         }),
       ],
     }),
-    space(10),
+    space(8),
+    new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      borders: NO_BORDER,
+      rows: [
+        new TableRow({
+          children: [
+            abntCell('Numeração de Seções — NBR 6024', nbr6024.status, nbr6024.descricao || ''),
+            spacer(),
+            abntCell('Resumo — NBR 6028', nbr6028.status, resumo6028),
+          ],
+        }),
+      ],
+    }),
+    space(8),
     card('Formatação Geral — NBR 14724', nbr14724.descricao || ''),
   ];
 }
