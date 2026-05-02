@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
-import mammoth from 'mammoth';
+import { unzipSync } from 'fflate';
 import { generateDocx } from '../../src/generate-docx.js';
 import { buildPrompt } from '../../src/prompt.js';
 
@@ -25,8 +25,7 @@ export async function onRequestPost(context) {
     let msg;
 
     if (isDocx) {
-      const result = await mammoth.extractRawText({ buffer: Buffer.from(arrayBuffer) });
-      const text = result.value;
+      const text = extractDocxText(arrayBuffer);
 
       msg = await anthropic.messages.create({
         model: 'claude-sonnet-4-6',
@@ -103,6 +102,22 @@ function jsonError(msg, status) {
     status,
     headers: { 'Content-Type': 'application/json' },
   });
+}
+
+function extractDocxText(arrayBuffer) {
+  const files = unzipSync(new Uint8Array(arrayBuffer));
+  const docXml = files['word/document.xml'];
+  if (!docXml) throw new Error('Arquivo Word inválido ou corrompido.');
+
+  const xml = new TextDecoder().decode(docXml);
+  return xml
+    .replace(/<\/w:p>/g, '\n')
+    .replace(/<w:br[^>]*\/>/g, '\n')
+    .replace(/<w:t[^>]*>([^<]*)<\/w:t>/g, '$1')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 function currentMonthYear() {
