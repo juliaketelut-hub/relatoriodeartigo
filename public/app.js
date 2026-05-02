@@ -6,6 +6,27 @@ const removeFile  = document.getElementById('removeFile');
 const btnGenerate = document.getElementById('btnGenerate');
 const form        = document.getElementById('form');
 const monthInput  = document.getElementById('monthYear');
+const dropTitle   = document.getElementById('dropTitle');
+
+// ── Type selector ──
+const TYPE_LABELS = {
+  artigo:  'Arraste o artigo em PDF ou Word (.docx) aqui',
+  tcc:     'Arraste o TCC ou monografia em PDF ou Word (.docx) aqui',
+  projeto: 'Arraste o projeto de pesquisa em PDF ou Word (.docx) aqui',
+};
+
+document.querySelectorAll('.type-btn').forEach(btn => {
+  const radio = btn.querySelector('input[type="radio"]');
+
+  if (radio.checked) btn.classList.add('active');
+
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    radio.checked = true;
+    dropTitle.textContent = TYPE_LABELS[radio.value] || TYPE_LABELS.artigo;
+  });
+});
 
 // Pre-fill current month/year
 const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
@@ -114,6 +135,7 @@ form.addEventListener('submit', async e => {
     fd.append('pdf', selectedFile);
     fd.append('clientName', document.getElementById('clientName').value.trim());
     fd.append('month', monthInput.value.trim());
+    fd.append('documentType', document.querySelector('input[name="documentType"]:checked')?.value || 'artigo');
 
     const res = await fetch('/api/analyze', { method: 'POST', body: fd });
 

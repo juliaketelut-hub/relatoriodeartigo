@@ -322,13 +322,18 @@ function recsTable(data) {
   });
 }
 
-// ── ABNT cards (5 normas: NBR6022 | NBR6023 / NBR6024 | NBR6028 / NBR14724) ──
+// ── ABNT cards — layout adaptado por tipo de documento ──
 function abntSection(normas) {
   const nbr6022  = normas.estrutura_nbr6022  || {};
   const nbr6023  = normas.referencias_nbr6023 || {};
   const nbr6024  = normas.numeracao_nbr6024  || {};
   const nbr6028  = normas.resumo_nbr6028     || {};
   const nbr14724 = normas.formatacao_nbr14724 || {};
+  const nbr6027  = normas.sumario_nbr6027    || null;
+
+  const estruturaLabel = nbr6022.norma_utilizada
+    ? `Estrutura — ${nbr6022.norma_utilizada}`
+    : 'Estrutura — NBR 6022:2018';
 
   function abntCell(lbl, status, content) {
     const children = [labelPara(lbl, 4), badgePara(status)];
@@ -363,9 +368,9 @@ function abntSection(normas) {
       rows: [
         new TableRow({
           children: [
-            abntCell('Estrutura — NBR 6022', nbr6022.status, [...ok6022, ...lack6022]),
+            abntCell(estruturaLabel, nbr6022.status, [...ok6022, ...lack6022]),
             spacer(),
-            abntCell('Referências — NBR 6023', nbr6023.status, nbr6023.descricao || ''),
+            abntCell('Referências — NBR 6023:2025', nbr6023.status, nbr6023.descricao || ''),
           ],
         }),
       ],
@@ -384,8 +389,12 @@ function abntSection(normas) {
         }),
       ],
     }),
+    ...(nbr6027 ? [
+      space(8),
+      card('Sumário — NBR 6027:2012', nbr6027.descricao || '', C.cardBg, C.creme),
+    ] : []),
     space(8),
-    card('Formatação Geral — NBR 14724', nbr14724.descricao || ''),
+    card('Formatação Geral — NBR 14724:2024', nbr14724.descricao || ''),
   ];
 }
 
@@ -523,6 +532,12 @@ export async function generateDocx(d) {
   const children = [
     // ── TITLE BLOCK ──
     space(4),
+    ...(d.documento_tipo ? [
+      new Paragraph({
+        children: [new TextRun({ text: d.documento_tipo.toUpperCase(), font: FONT_B, size: F.xxs, color: C.mutedText, bold: true })],
+        spacing: { before: 0, after: 60 },
+      }),
+    ] : []),
     new Paragraph({
       children: [new TextRun({ text: 'PARECER TÉCNICO', font: FONT_B, size: F.xs, color: C.creme, bold: true })],
       spacing: { before: 0, after: 100 },

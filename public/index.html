@@ -34,6 +34,24 @@
       <!-- UPLOAD FORM -->
       <section id="sec-upload">
         <form id="form" novalidate>
+          <div class="field" style="margin-bottom:8px;">
+            <label>Tipo de documento</label>
+          </div>
+          <div class="type-selector" id="typeSelector">
+            <label class="type-btn">
+              <input type="radio" name="documentType" value="artigo" checked hidden>
+              <span>Artigo Científico</span>
+            </label>
+            <label class="type-btn">
+              <input type="radio" name="documentType" value="tcc" hidden>
+              <span>TCC / Monografia</span>
+            </label>
+            <label class="type-btn">
+              <input type="radio" name="documentType" value="projeto" hidden>
+              <span>Projeto de Pesquisa</span>
+            </label>
+          </div>
+
           <div class="drop-zone" id="dropZone">
             <div class="drop-icon">
               <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -43,7 +61,7 @@
                 <line x1="9" y1="15" x2="15" y2="15"/>
               </svg>
             </div>
-            <p class="drop-title">Arraste o artigo em PDF ou Word (.docx) aqui</p>
+            <p class="drop-title" id="dropTitle">Arraste o documento em PDF ou Word (.docx) aqui</p>
             <p class="drop-hint">ou clique para selecionar</p>
             <input type="file" id="pdfInput" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
             <div class="file-pill" id="filePill" hidden>
@@ -120,17 +138,17 @@
       <div class="feature-card">
         <span class="feature-num">01</span>
         <span class="feature-label">NORMAS VERIFICADAS</span>
-        <p class="feature-text">NBR 6022, 6023, 6024,<br>6028, 10520 e 14724</p>
+        <p class="feature-text">Artigo, TCC, Monografia<br>e Projeto de Pesquisa</p>
       </div>
       <div class="feature-card">
         <span class="feature-num">02</span>
         <span class="feature-label">NOVA PORTARIA</span>
-        <p class="feature-text">CNPq nº 2.664/2026<br>Declaração de uso de IA</p>
+        <p class="feature-text">NBR 6022 · 6023 · 6024<br>6027 · 6028 · 14724 · 15287</p>
       </div>
       <div class="feature-card">
         <span class="feature-num">03</span>
-        <span class="feature-label">FORMATO DE SAÍDA</span>
-        <p class="feature-text">Word (.docx)<br>Editável</p>
+        <span class="feature-label">PORTARIA CNPq</span>
+        <p class="feature-text">nº 2.664/2026<br>Declaração de uso de IA</p>
       </div>
     </div>
   </section>

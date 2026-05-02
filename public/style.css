@@ -101,6 +101,42 @@ body {
   letter-spacing: 0.1em;
 }
 
+/* ── TYPE SELECTOR ── */
+.type-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.type-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  cursor: pointer;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  font-family: var(--font-label);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: uppercase;
+  text-align: center;
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+}
+.type-btn:last-child { border-right: none; }
+.type-btn.active {
+  background: var(--inkwell);
+  color: var(--au-lait);
+}
+.type-btn:not(.active):hover {
+  background: var(--surface-warm);
+  color: var(--text);
+}
+
 /* ── DROP ZONE ── */
 .drop-zone {
   border: 2px dashed var(--border);
