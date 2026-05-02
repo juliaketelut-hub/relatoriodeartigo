@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JK Jurídico — Relatório Científico</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Gotu&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-jk">JK</span>
+        <span class="brand-name">JURÍDICO</span>
+      </div>
+      <span class="header-label">Relatório de Avaliação Científica</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">SISTEMA DE ANÁLISE ACADÊMICA</p>
+        <h1>Gerador de<br>Relatório Científico</h1>
+        <p class="hero-sub">ABNT · Portaria CNQ 2664/2026 · Análise automática por IA</p>
+      </div>
+    </section>
+
+    <div class="container">
+
+      <!-- UPLOAD FORM -->
+      <section id="sec-upload">
+        <form id="form" novalidate>
+          <div class="drop-zone" id="dropZone">
+            <div class="drop-icon">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="12" y1="18" x2="12" y2="12"/>
+                <line x1="9" y1="15" x2="15" y2="15"/>
+              </svg>
+            </div>
+            <p class="drop-title">Arraste o artigo em PDF aqui</p>
+            <p class="drop-hint">ou clique para selecionar</p>
+            <input type="file" id="pdfInput" accept=".pdf" hidden>
+            <div class="file-pill" id="filePill" hidden>
+              <span id="fileName"></span>
+              <button type="button" id="removeFile" class="pill-remove" aria-label="Remover arquivo">×</button>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="clientName">Nome do autor / cliente</label>
+              <input type="text" id="clientName" placeholder="Ex: Ana Carolina Dalosso">
+            </div>
+            <div class="field">
+              <label for="monthYear">Mês / Ano</label>
+              <input type="text" id="monthYear" placeholder="Ex: Maio / 2026">
+            </div>
+          </div>
+
+          <button type="submit" id="btnGenerate" class="btn-primary" disabled>
+            <span>Gerar Relatório</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </form>
+      </section>
+
+      <!-- PROGRESS -->
+      <section id="sec-progress" hidden>
+        <div class="status-card">
+          <div class="spinner"></div>
+          <div>
+            <p class="status-title">Analisando artigo...</p>
+            <p class="status-sub" id="progressMsg">Lendo estrutura do documento</p>
+          </div>
+        </div>
+        <ul class="steps" id="stepsList">
+          <li class="step active" data-msg="Lendo estrutura do documento...">Extração do conteúdo</li>
+          <li class="step" data-msg="Verificando normas ABNT...">Análise ABNT</li>
+          <li class="step" data-msg="Verificando Portaria CNQ 2664/2026...">Verificação CNQ 2664/2026</li>
+          <li class="step" data-msg="Gerando documento Word...">Geração do relatório</li>
+        </ul>
+      </section>
+
+      <!-- RESULT -->
+      <section id="sec-result" hidden>
+        <div class="status-card success">
+          <div class="status-icon success-icon">✓</div>
+          <div>
+            <p class="status-title">Relatório gerado com sucesso</p>
+            <p class="status-sub" id="resultFile"></p>
+          </div>
+          <a id="downloadLink" href="#" class="btn-download">Baixar .docx</a>
+        </div>
+        <button type="button" id="btnNew" class="btn-ghost">Nova análise</button>
+      </section>
+
+      <!-- ERROR -->
+      <section id="sec-error" hidden>
+        <div class="status-card error">
+          <div class="status-icon error-icon">!</div>
+          <div>
+            <p class="status-title">Erro na análise</p>
+            <p class="status-sub" id="errorMsg"></p>
+          </div>
+        </div>
+        <button type="button" id="btnRetry" class="btn-ghost">Tentar novamente</button>
+      </section>
+
+    </div><!-- /container -->
+  </main>
+
+  <section class="features">
+    <div class="container features-grid">
+      <div class="feature-card">
+        <span class="feature-num">01</span>
+        <span class="feature-label">NORMAS VERIFICADAS</span>
+        <p class="feature-text">NBR 6022, 6023,<br>10520 e 14724</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-num">02</span>
+        <span class="feature-label">NOVA PORTARIA</span>
+        <p class="feature-text">CNQ 2664/2026<br>Declaração de uso de IA</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-num">03</span>
+        <span class="feature-label">FORMATO DE SAÍDA</span>
+        <p class="feature-text">Word (.docx)<br>Editável</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-brand">JK JURÍDICO · JULIA KETELUT</span>
+      <span class="footer-contact">juliaketelut.juridico@gmail.com · (44) 99165-2729</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "relatorio-jk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev public --compatibility-flag=nodejs_compat",
+    "deploy": "wrangler pages deploy public"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0",
+    "docx": "^8.5.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.78.0"
+  }
+}
