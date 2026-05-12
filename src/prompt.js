@@ -107,7 +107,8 @@ Para cada ponto levantado pela orientadora, indique:
 - Se foi CORRIGIDO (evidência encontrada no documento)
 - Se está PENDENTE (o problema persiste no documento)
 - Se foi PARCIALMENTE corrigido (melhorou mas ainda tem ressalvas)
-- Uma observação específica e orientada`;
+- Uma observação específica sobre o que foi feito ou o que ainda falta
+- Uma sugestão de correção concreta e acionável: sempre que o status for pendente ou parcial, forneça um trecho de texto, reformulação ou instrução direta que o aluno possa aplicar imediatamente no documento`;
 }
 
 // ── JSON Schemas ─────────────────────────────────────────────────────────────
@@ -456,7 +457,8 @@ function buildFeedbackSchema(feedback) {
       {
         "ponto": "descrição resumida do ponto levantado pela orientadora",
         "status": "corrigido ou pendente ou parcial",
-        "observacao": "observação específica sobre o que foi feito ou o que ainda falta"
+        "observacao": "observação específica sobre o que foi feito ou o que ainda falta",
+        "sugestao_correcao": "sugestão concreta e acionável: trecho pronto para inserir, reformulação direta ou instrução clara — preencher sempre que status for pendente ou parcial; string vazia se corrigido"
       }
     ],
     "pendencias_criticas": ["ponto crítico ainda não corrigido 1", "ponto crítico ainda não corrigido 2"],

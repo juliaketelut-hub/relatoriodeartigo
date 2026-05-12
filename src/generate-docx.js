@@ -435,7 +435,18 @@ function feedbackOrientadoraSection(fb) {
           shading: { type: ShadingType.SOLID, color: bg },
           borders: NO_BORDER,
           margins: { top: 100, bottom: 100, left: 80, right: 160 },
-          children: [bodyPara(p.observacao || '', { italics: true, color: C.mutedText })],
+          children: [
+            bodyPara(p.observacao || '', { italics: true, color: C.mutedText }),
+            ...(p.sugestao_correcao ? [
+              new Paragraph({
+                children: [
+                  new TextRun({ text: '→  ', font: FONT_B, size: F.md, color: C.creme, bold: true }),
+                  new TextRun({ text: p.sugestao_correcao, font: FONT_B, size: F.md, color: C.inkwell, bold: true }),
+                ],
+                spacing: { before: 60, after: 0 },
+              }),
+            ] : []),
+          ],
         }),
       ],
     });
