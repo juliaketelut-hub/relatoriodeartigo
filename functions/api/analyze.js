@@ -25,19 +25,22 @@ export async function onRequestPost(context) {
     const anthropic = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
     let msg;
 
+    const MODEL     = 'claude-sonnet-4-6';
+    const MAX_TOKENS = 16000;
+
     if (isDocx) {
       const text = extractDocxText(arrayBuffer);
 
-      msg = await anthropic.messages.create({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 8192,
+      msg = await anthropic.messages.stream({
+        model: MODEL,
+        max_tokens: MAX_TOKENS,
         messages: [{
           role: 'user',
           content: [
             { type: 'text', text: `CONTEÚDO DO DOCUMENTO:\n\n${text}\n\n---\n\n${buildPrompt(clientName, month, documentType, feedbackOrientadora)}` },
           ],
         }],
-      });
+      }).finalMessage();
     } else {
       // PDF → base64
       const bytes = new Uint8Array(arrayBuffer);
@@ -45,9 +48,9 @@ export async function onRequestPost(context) {
       for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
       const base64 = btoa(binary);
 
-      msg = await anthropic.messages.create({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 8192,
+      msg = await anthropic.messages.stream({
+        model: MODEL,
+        max_tokens: MAX_TOKENS,
         messages: [{
           role: 'user',
           content: [
@@ -58,7 +61,7 @@ export async function onRequestPost(context) {
             { type: 'text', text: buildPrompt(clientName, month, documentType, feedbackOrientadora) },
           ],
         }],
-      });
+      }).finalMessage();
     }
 
     const raw = msg.content[0]?.text || '';
