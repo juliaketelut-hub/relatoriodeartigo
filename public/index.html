@@ -81,6 +81,11 @@
             </div>
           </div>
 
+          <div class="field field--full">
+            <label for="feedbackOrientadora">Feedbacks da orientadora <span class="label-optional">(opcional)</span></label>
+            <textarea id="feedbackOrientadora" rows="5" placeholder="Cole aqui os comentários, anotações ou pontos levantados pela orientadora. O relatório irá verificar se cada ponto foi endereçado no documento."></textarea>
+          </div>
+
           <button type="submit" id="btnGenerate" class="btn-primary" disabled>
             <span>Gerar Relatório</span>
             <span class="btn-arrow">→</span>
@@ -99,8 +104,9 @@
         </div>
         <ul class="steps" id="stepsList">
           <li class="step active" data-msg="Lendo estrutura do documento...">Extração do conteúdo</li>
-          <li class="step" data-msg="Verificando normas ABNT...">Análise ABNT</li>
-          <li class="step" data-msg="Verificando Portaria CNQ 2664/2026...">Verificação CNQ 2664/2026</li>
+          <li class="step" data-msg="Analisando qualidade textual e debate entre autores...">Análise qualitativa</li>
+          <li class="step" data-msg="Verificando normas ABNT e feedbacks da orientadora...">Análise ABNT e feedbacks</li>
+          <li class="step" data-msg="Verificando Portaria CNPq 2664/2026...">Verificação CNPq 2664/2026</li>
           <li class="step" data-msg="Gerando documento Word...">Geração do relatório</li>
         </ul>
       </section>

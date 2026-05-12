@@ -322,6 +322,159 @@ function recsTable(data) {
   });
 }
 
+// ── Qualidade textual — tabela de critérios (seção 05) ──
+function qualidadeTextualTable(qt) {
+  if (!qt) return null;
+
+  const items = [
+    { label: 'Clareza e Objetividade',    data: qt.clareza_objetividade },
+    { label: 'Coesão e Coerência',        data: qt.coesao_coerencia },
+    { label: 'Progressão Temática',       data: qt.progressao_tematica },
+    { label: 'Construção de Parágrafos',  data: qt.construcao_paragrafos },
+    { label: 'Originalidade / Contribuição', data: qt.originalidade_contribuicao },
+  ];
+
+  const header = new TableRow({
+    children: ['CRITÉRIO TEXTUAL', 'AVALIAÇÃO', 'PONTUAÇÃO'].map((h, i) =>
+      new TableCell({
+        shading: { type: ShadingType.SOLID, color: C.inkwell },
+        borders: NO_BORDER,
+        ...(i === 0 ? { width: { size: 2400, type: WidthType.DXA } } : {}),
+        ...(i === 2 ? { width: { size: 1100, type: WidthType.DXA } } : {}),
+        margins: { top: 80, bottom: 80, left: 160, right: 80 },
+        children: [
+          new Paragraph({
+            children: [new TextRun({ text: h, font: FONT_B, size: F.xs, color: C.auLait, bold: true })],
+            alignment: i === 2 ? AlignmentType.RIGHT : AlignmentType.LEFT,
+          }),
+        ],
+      })
+    ),
+  });
+
+  const rows = items.map((item, idx) => {
+    const bg = idx % 2 === 0 ? C.lightBg : C.cardBg;
+    const obj = item.data || {};
+    const pct = Number(obj.pontuacao) || 0;
+    const scoreColor = pct >= 70 ? C.greenText : pct >= 50 ? C.amberText : C.redText;
+
+    return new TableRow({
+      children: [
+        new TableCell({
+          shading: { type: ShadingType.SOLID, color: bg },
+          borders: NO_BORDER,
+          width: { size: 2400, type: WidthType.DXA },
+          margins: { top: 80, bottom: 80, left: 160, right: 80 },
+          children: [bodyPara(item.label)],
+        }),
+        new TableCell({
+          shading: { type: ShadingType.SOLID, color: bg },
+          borders: NO_BORDER,
+          margins: { top: 80, bottom: 80, left: 160, right: 80 },
+          children: [bodyPara(obj.avaliacao || '')],
+        }),
+        new TableCell({
+          shading: { type: ShadingType.SOLID, color: bg },
+          borders: NO_BORDER,
+          width: { size: 1100, type: WidthType.DXA },
+          margins: { top: 80, bottom: 80, left: 80, right: 160 },
+          children: [
+            new Paragraph({
+              children: [new TextRun({ text: `${pct}%`, font: FONT_B, size: F.lg, color: scoreColor, bold: true })],
+              alignment: AlignmentType.RIGHT,
+            }),
+          ],
+        }),
+      ],
+    });
+  });
+
+  return new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, borders: NO_BORDER, rows: [header, ...rows] });
+}
+
+// ── Feedbacks da orientadora (seção condicional) ──
+function feedbackOrientadoraSection(fb) {
+  if (!fb || !fb.tem_feedback) return [];
+
+  const statusMap = {
+    corrigido: { bg: C.greenBg, text: C.greenText, label: 'CORRIGIDO' },
+    pendente:  { bg: C.redBg,   text: C.redText,   label: 'PENDENTE' },
+    parcial:   { bg: C.amberBg, text: C.amberText, label: 'PARCIAL' },
+  };
+
+  const pontoRows = (fb.pontos || []).map((p, idx) => {
+    const st = statusMap[p.status] || statusMap.parcial;
+    const bg = idx % 2 === 0 ? C.lightBg : C.cardBg;
+
+    return new TableRow({
+      children: [
+        new TableCell({
+          shading: { type: ShadingType.SOLID, color: bg },
+          borders: NO_BORDER,
+          width: { size: 3200, type: WidthType.DXA },
+          margins: { top: 100, bottom: 100, left: 160, right: 80 },
+          children: [bodyPara(p.ponto || '')],
+        }),
+        new TableCell({
+          shading: { type: ShadingType.SOLID, color: bg },
+          borders: NO_BORDER,
+          width: { size: 1000, type: WidthType.DXA },
+          margins: { top: 100, bottom: 100, left: 80, right: 80 },
+          verticalAlign: VerticalAlign.CENTER,
+          children: [
+            new Paragraph({
+              children: [new TextRun({
+                text: `  ${st.label}  `, font: FONT_B, size: F.xs, bold: true,
+                color: st.text, shading: { type: ShadingType.SOLID, color: st.bg },
+              })],
+              alignment: AlignmentType.CENTER,
+            }),
+          ],
+        }),
+        new TableCell({
+          shading: { type: ShadingType.SOLID, color: bg },
+          borders: NO_BORDER,
+          margins: { top: 100, bottom: 100, left: 80, right: 160 },
+          children: [bodyPara(p.observacao || '', { italics: true, color: C.mutedText })],
+        }),
+      ],
+    });
+  });
+
+  const headerRow = new TableRow({
+    children: ['PONTO LEVANTADO', 'STATUS', 'OBSERVAÇÃO'].map((h, i) =>
+      new TableCell({
+        shading: { type: ShadingType.SOLID, color: C.inkwell },
+        borders: NO_BORDER,
+        ...(i === 0 ? { width: { size: 3200, type: WidthType.DXA } } : {}),
+        ...(i === 1 ? { width: { size: 1000, type: WidthType.DXA } } : {}),
+        margins: { top: 80, bottom: 80, left: 160, right: 80 },
+        children: [
+          new Paragraph({
+            children: [new TextRun({ text: h, font: FONT_B, size: F.xs, color: C.auLait, bold: true })],
+          }),
+        ],
+      })
+    ),
+  });
+
+  const parts = [
+    new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, borders: NO_BORDER, rows: [headerRow, ...pontoRows] }),
+  ];
+
+  if ((fb.pendencias_criticas || []).length > 0) {
+    parts.push(space(8));
+    parts.push(card('Pendências Críticas Não Corrigidas', fb.pendencias_criticas, C.redBg, C.redText));
+  }
+
+  if (fb.sintese) {
+    parts.push(space(8));
+    parts.push(card('Síntese dos Feedbacks', fb.sintese));
+  }
+
+  return parts;
+}
+
 // ── ABNT cards — layout adaptado por tipo de documento ──
 function abntSection(normas) {
   const nbr6022  = normas.estrutura_nbr6022  || {};
@@ -520,10 +673,12 @@ function makeFooter() {
 export async function generateDocx(d) {
   const ag  = d.analise_geral        || {};
   const ft  = d.fundamentacao_teorica || {};
+  const qt  = d.qualidade_textual    || null;
   const met = d.metodologia          || {};
   const dev = d.desenvolvimento_argumentacao || [];
   const nbt = d.normas_abnt          || {};
   const cnq = d.cnq_2664_2026        || {};
+  const fb  = d.feedback_orientadora || null;
   const rec = d.recomendacoes_prioritarias || {};
 
   const obj   = ag.objetivos          || {};
@@ -661,6 +816,11 @@ export async function generateDocx(d) {
     space(8),
     card('Citações — NBR 10520', ft.citacoes_nbr10520 || ''),
 
+    ...(ft.debate_autores ? [
+      space(8),
+      card('Debate entre Autores', ft.debate_autores, C.cardBg, C.creme),
+    ] : []),
+
     ...(ft.alerta_revisao ? [
       space(6),
       new Paragraph({
@@ -695,20 +855,36 @@ export async function generateDocx(d) {
     criteriaTable(dev),
     space(14),
 
-    // ── 05 NORMAS ABNT ──
-    sectionHeader(5, 'Normas ABNT'),
+    // ── 05 QUALIDADE TEXTUAL ──
+    ...(qt ? [
+      sectionHeader(5, 'Qualidade Textual'),
+      space(8),
+      qualidadeTextualTable(qt),
+      space(14),
+    ] : []),
+
+    // ── 06 NORMAS ABNT ──
+    sectionHeader(qt ? 6 : 5, 'Normas ABNT'),
     space(8),
     ...abntSection(nbt),
     space(14),
 
-    // ── 06 PORTARIA CNQ 2664/2026 ──
+    // ── IA PORTARIA CNQ 2664/2026 ──
     sectionHeader('IA', 'Portaria CNPq nº 2.664/2026'),
     space(8),
     cnqCard(cnq),
     space(14),
 
-    // ── 07 RECOMENDAÇÕES PRIORITÁRIAS ──
-    sectionHeader(6, 'Recomendações Prioritárias'),
+    // ── FEEDBACKS DA ORIENTADORA (condicional) ──
+    ...(fb && fb.tem_feedback ? [
+      sectionHeader('FO', 'Feedbacks da Orientadora'),
+      space(8),
+      ...feedbackOrientadoraSection(fb),
+      space(14),
+    ] : []),
+
+    // ── RECOMENDAÇÕES PRIORITÁRIAS ──
+    sectionHeader(qt ? 7 : 6, 'Recomendações Prioritárias'),
     space(8),
     recsTable(rec),
     space(14),

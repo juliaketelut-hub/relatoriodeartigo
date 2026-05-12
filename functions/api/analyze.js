@@ -8,10 +8,11 @@ export async function onRequestPost(context) {
 
   try {
     const form = await request.formData();
-    const file         = form.get('pdf');
-    const clientName   = (form.get('clientName') || '').trim();
-    const month        = (form.get('month') || currentMonthYear()).trim();
-    const documentType = (form.get('documentType') || 'artigo').trim();
+    const file                = form.get('pdf');
+    const clientName          = (form.get('clientName') || '').trim();
+    const month               = (form.get('month') || currentMonthYear()).trim();
+    const documentType        = (form.get('documentType') || 'artigo').trim();
+    const feedbackOrientadora = (form.get('feedbackOrientadora') || '').trim();
 
     if (!file || typeof file === 'string') {
       return jsonError('Arquivo não encontrado.', 400);
@@ -33,7 +34,7 @@ export async function onRequestPost(context) {
         messages: [{
           role: 'user',
           content: [
-            { type: 'text', text: `CONTEÚDO DO DOCUMENTO:\n\n${text}\n\n---\n\n${buildPrompt(clientName, month, documentType)}` },
+            { type: 'text', text: `CONTEÚDO DO DOCUMENTO:\n\n${text}\n\n---\n\n${buildPrompt(clientName, month, documentType, feedbackOrientadora)}` },
           ],
         }],
       });
@@ -54,7 +55,7 @@ export async function onRequestPost(context) {
               type: 'document',
               source: { type: 'base64', media_type: 'application/pdf', data: base64 },
             },
-            { type: 'text', text: buildPrompt(clientName, month, documentType) },
+            { type: 'text', text: buildPrompt(clientName, month, documentType, feedbackOrientadora) },
           ],
         }],
       });

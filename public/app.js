@@ -136,6 +136,7 @@ form.addEventListener('submit', async e => {
     fd.append('clientName', document.getElementById('clientName').value.trim());
     fd.append('month', monthInput.value.trim());
     fd.append('documentType', document.querySelector('input[name="documentType"]:checked')?.value || 'artigo');
+    fd.append('feedbackOrientadora', document.getElementById('feedbackOrientadora').value.trim());
 
     const res = await fetch('/api/analyze', { method: 'POST', body: fd });
 

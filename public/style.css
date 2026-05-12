@@ -200,6 +200,30 @@ body {
 }
 .field input:focus { border-color: var(--creme); }
 .field input::placeholder { color: var(--muted); }
+.field textarea {
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
+  transition: border-color 0.2s;
+  resize: vertical;
+  line-height: 1.5;
+}
+.field textarea:focus { border-color: var(--creme); }
+.field textarea::placeholder { color: var(--muted); }
+.field--full { margin-bottom: 20px; }
+.label-optional {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
 
 /* ── BUTTONS ── */
 .btn-primary {
